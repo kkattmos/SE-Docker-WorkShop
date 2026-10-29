@@ -24,6 +24,10 @@ COPY app/ .
 # TODO(step-4d): set the runtime base image (same tag as step-4a for consistency).
 FROM node:20.11-slim
 
+# Patch Debian CVEs in the pinned base, and drop npm (unused at runtime, ships a vulnerable tar).
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
 WORKDIR /app
 
 # TODO(step-4e): copy the fully-installed app from the builder stage.
